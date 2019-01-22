@@ -1,11 +1,20 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.Main;
+import gui.util.Alerts;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.VBox;
 
 public class MainViewController implements Initializable {
 	
@@ -30,13 +39,39 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemAboutAction() {
-		System.out.println("onMenuItemAboutAction");
+		loadView("/gui/About.fxml");
 	}
 
 	@Override
 	public void initialize(URL uri, ResourceBundle rb) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private synchronized void loadView(String absoluteName) {		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			VBox newVBox = loader.load();
+			
+			//pegando Scene da Tela Principal
+			Scene mainScene = Main.getMainScene();
+			//pegando referencia p/ VBox da tela principal
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+			//Guardando primeiro filho da MainVBox referente a barra de menu
+			Node mainMenu = mainVBox.getChildren().get(0);
+			//limpando filhos VBox da cena principal
+			mainVBox.getChildren().clear();
+			
+			//Montando a cena da tela About
+			//adicionando o menu principal guardado
+			mainVBox.getChildren().add(mainMenu);
+			//adicionando todos os filhos VBox About.fxml
+			mainVBox.getChildren().addAll(newVBox.getChildren());
+			
+			
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);			
+		}
 	}
 
 }
