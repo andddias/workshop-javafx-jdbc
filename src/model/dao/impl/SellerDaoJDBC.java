@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import db.DB;
-import db.DbException;
+import db.DbIntegrityException;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
@@ -54,11 +54,11 @@ public class SellerDaoJDBC implements SellerDao{
 				DB.closeResultSet(rs);
 			}
 			else {
-				throw new DbException("Unexpected error! No rows affected!");
+				throw new DbIntegrityException("Unexpected error! No rows affected!");
 			}
 		}
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			throw new DbIntegrityException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);
@@ -91,9 +91,9 @@ public class SellerDaoJDBC implements SellerDao{
 		catch (SQLException e) {
 			try {
 				conn.rollback();
-				throw new DbException(e.getMessage());
+				throw new DbIntegrityException(e.getMessage());
 			} catch (SQLException e1) {
-				throw new DbException("Error trying to rollback! Caused by: " + e1.getMessage());
+				throw new DbIntegrityException("Error trying to rollback! Caused by: " + e1.getMessage());
 			}			
 		}
 		finally {
@@ -122,9 +122,9 @@ public class SellerDaoJDBC implements SellerDao{
 		catch (SQLException e) {
 			try {
 				conn.rollback();
-				throw new DbException(e.getMessage());
+				throw new DbIntegrityException(e.getMessage());
 			} catch (SQLException e1) {
-				throw new DbException("Error trying to rollback! Caused by: " + e1.getMessage());
+				throw new DbIntegrityException("Error trying to rollback! Caused by: " + e1.getMessage());
 			}			
 		}
 		finally {
@@ -154,7 +154,7 @@ public class SellerDaoJDBC implements SellerDao{
 			return null;
 		}
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			throw new DbIntegrityException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);
@@ -212,7 +212,7 @@ public class SellerDaoJDBC implements SellerDao{
 					
 		}
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			throw new DbIntegrityException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);
@@ -255,7 +255,7 @@ public class SellerDaoJDBC implements SellerDao{
 					
 		}
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			throw new DbIntegrityException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);
